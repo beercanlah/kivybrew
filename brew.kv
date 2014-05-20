@@ -24,3 +24,10 @@
         Button:
             text: 'on' if root.pump_status else 'off'
             on_press: root.toggle_pump()
+
+        PropertyLabel:
+            text: 'PID'
+
+        Button:
+            text: 'on' if root.pid_status else 'off'
+            on_press: root.toggle_pid()

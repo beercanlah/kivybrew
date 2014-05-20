@@ -13,15 +13,20 @@ from ardumashtun import UnoMashtun
 class BrewControl(Widget):
     temperature = NumericProperty(0)
     pump_status = BooleanProperty(False)
+    pid_status = BooleanProperty(False)
 
     mashtun = UnoMashtun('/dev/tty.usbmodem1411')
 
     def update(self, dt):
         self.temperature = self.mashtun.temperature
         self.pump_status = self.mashtun.pump
+        self.pid_status = self.mashtun.pid
 
     def toggle_pump(self):
         self.mashtun.pump = not self.mashtun.pump
+
+    def toggle_pid(self):
+        self.mashtun.pid = not self.mashtun.pid
 
 
 class BrewApp(App):
