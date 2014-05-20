@@ -9,12 +9,18 @@
         x: root.width / 8
         width: root.width / 4
         top: root.height - root.height / 8
+        row_default_height: 30
+        row_force_default: True
 
         PropertyLabel:
             text: 'Temperature'
 
         PropertyLabel:
-            text: str(root.temperature) + " degree C"
+            text: str(root.temperature)
 
         PropertyLabel:
             text: 'Pump'
+
+        Button:
+            text: 'on' if root.pump_status else 'off'
+            on_press: root.toggle_pump()
