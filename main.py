@@ -1,9 +1,10 @@
 from kivy.app import App
 from kivy.uix.widget import Widget
+from kivy.properties import NumericProperty
 
 
 class BrewControl(Widget):
-    pass
+    temperature = NumericProperty(0)
 
 
 class BrewApp(App):

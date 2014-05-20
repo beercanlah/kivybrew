@@ -1,8 +1,20 @@
+<PropertyLabel@Label>:
+    halign: 'left'
+    text_size: self.width, None
+
+
 <BrewControl>:
     GridLayout:
         cols: 2
         x: root.width / 8
+        width: root.width / 4
         top: root.height - root.height / 8
 
-        Label:
+        PropertyLabel:
             text: 'Temperature'
+
+        PropertyLabel:
+            text: str(root.temperature) + " degree C"
+
+        PropertyLabel:
+            text: 'Pump'
