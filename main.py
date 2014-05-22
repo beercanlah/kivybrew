@@ -14,11 +14,13 @@ class BrewControl(Widget):
     temperature = NumericProperty(0)
     pump_status = BooleanProperty(False)
     pid_status = BooleanProperty(False)
+    heater_status = BooleanProperty(False)
 
     mashtun = UnoMashtun('/dev/tty.usbmodem1411')
 
     def update(self, dt):
         self.temperature = self.mashtun.temperature
+        self.heater_status = self.mashtun.heater
         self.pump_status = self.mashtun.pump
         self.pid_status = self.mashtun.pid
 

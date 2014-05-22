@@ -19,6 +19,13 @@
             text: str(root.temperature)
 
         PropertyLabel:
+            text: 'Heater'
+
+        PropertyLabel:
+            halign: 'left'
+            text: 'on' if root.heater_status else 'off'
+
+        PropertyLabel:
             text: 'Pump'
 
         Button:
