@@ -23,11 +23,17 @@
             text: str(root.temperature)
 
         PropertyLabel:
-            text: 'Heater'
+            text: 'Dutycycle'
+
+        EchoLabel:
+            text: str(root.dutycycle)
 
         PropertyLabel:
-            halign: 'center'
+            text: 'Heater'
+
+        Button:
             text: 'on' if root.heater_status else 'off'
+            on_press: root.toggle_heater()
 
         PropertyLabel:
             text: 'Pump'
@@ -55,7 +61,7 @@
             text: 'Setpoint'
 
         FloatInput:
-            on_text_validate: root.set_setpoint(float(self.text))
+            on_text_validate: root.update_parameter('setpoint', float(self.text))
 
         EchoLabel:
             text: str(root.setpoint)
@@ -64,7 +70,7 @@
             text: 'P Value'
 
         FloatInput:
-            on_text_validate: root.set_p_value(float(self.text))
+            on_text_validate: root.update_parameter('p_value', float(self.text))
 
         EchoLabel:
             text: str(root.p_value)
@@ -73,7 +79,7 @@
             text: 'I Value'
 
         FloatInput:
-            on_text_validate: root.set_i_value(float(self.text))
+            on_text_validate: root.update_parameter('i_value', float(self.text))
 
         EchoLabel:
             text: str(root.i_value)
