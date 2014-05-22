@@ -33,6 +33,8 @@ class BrewControl(Widget):
     pid_status = BooleanProperty(False)
     heater_status = BooleanProperty(False)
     setpoint = NumericProperty(0)
+    p_value = NumericProperty(0)
+    i_value = NumericProperty(0)
 
     mashtun = UnoMashtun('/dev/tty.usbmodem1411')
 
@@ -42,6 +44,8 @@ class BrewControl(Widget):
         self.pump_status = self.mashtun.pump
         self.pid_status = self.mashtun.pid
         self.setpoint = self.mashtun.setpoint
+        self.p_value = self.mashtun.p_value
+        self.i_value = self.mashtun.i_value
 
     def toggle_pump(self):
         self.mashtun.pump = not self.mashtun.pump
@@ -49,8 +53,14 @@ class BrewControl(Widget):
     def toggle_pid(self):
         self.mashtun.pid = not self.mashtun.pid
 
-    def set_setpoint(self, setpoint):
-        self.mashtun.setpoint = setpoint
+    def set_setpoint(self, value):
+        self.mashtun.setpoint = value
+
+    def set_p_value(self, value):
+        self.mashtun.p_value = value
+
+    def set_i_value(self, value):
+        self.mashtun.i_value = value
 
 
 class BrewApp(App):

@@ -59,3 +59,21 @@
 
         EchoLabel:
             text: str(root.setpoint)
+
+        PropertyLabel:
+            text: 'P Value'
+
+        FloatInput:
+            on_text_validate: root.set_p_value(float(self.text))
+
+        EchoLabel:
+            text: str(root.p_value)
+
+        PropertyLabel:
+            text: 'I Value'
+
+        FloatInput:
+            on_text_validate: root.set_i_value(float(self.text))
+
+        EchoLabel:
+            text: str(root.i_value)
