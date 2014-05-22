@@ -8,12 +8,32 @@
 
 <BrewControl>:
     GridLayout:
-        id: main_params
-        cols: 2
+        id: connection_box
+        cols: 1
         x: root.width / 8
         width: root.width / 4
         top: root.height - root.height / 8
         row_default_height: 30
+        row_force_default: True
+
+        PropertyLabel:
+            text: 'Serial port'
+
+        TextInput:
+            multiline: False
+            text: '/dev/tty.usbmodem1411'
+
+        Button:
+            text: 'connect' if not root.connected else 'disconnect'
+            on_press: root.connect_to_arduino(self.text)
+
+    GridLayout:
+        id: main_params
+        cols: 2
+        x: connection_box.x
+        width: connection_box.width
+        row_default_height: connection_box.row_default_height
+        top: connection_box.y - self.row_default_height
         row_force_default: True
 
         PropertyLabel:

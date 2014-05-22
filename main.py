@@ -36,8 +36,9 @@ class BrewControl(Widget):
     p_value = NumericProperty(0)
     i_value = NumericProperty(0)
     dutycycle = NumericProperty(0)
+    connected = BooleanProperty(False)
 
-    mashtun = UnoMashtun('/dev/tty.usbmodem1411')
+    mashtun = None
 
     def update(self, dt):
         self.temperature = self.mashtun.temperature
@@ -69,11 +70,15 @@ class BrewControl(Widget):
     def update_parameter(self, parameter, value):
         setattr(self.mashtun, parameter, value)
 
+    def connect_to_arduino(self, connection):
+        self.mashtun = UnoMashtun('/dev/tty.usbmodem1411')
+        Clock.schedule_interval(self.update, 1.0)
+        self.connected = True
+
 
 class BrewApp(App):
     def build(self):
         control = BrewControl()
-        Clock.schedule_interval(control.update, 1.0)
         return control
 
 
