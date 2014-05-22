@@ -20,12 +20,13 @@
             text: 'Serial port'
 
         TextInput:
+            id: connection_input
             multiline: False
             text: '/dev/tty.usbmodem1411'
 
         Button:
             text: 'connect' if not root.connected else 'disconnect'
-            on_press: root.connect_to_arduino(self.text)
+            on_press: root.connect_to_arduino(connection_input.text)
 
     GridLayout:
         id: main_params

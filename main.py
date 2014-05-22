@@ -71,9 +71,10 @@ class BrewControl(Widget):
         setattr(self.mashtun, parameter, value)
 
     def connect_to_arduino(self, connection):
-        self.mashtun = UnoMashtun('/dev/tty.usbmodem1411')
-        Clock.schedule_interval(self.update, 1.0)
-        self.connected = True
+        if not self.connected:
+            self.mashtun = UnoMashtun(connection)
+            Clock.schedule_interval(self.update, 1.0)
+            self.connected = True
 
 
 class BrewApp(App):
