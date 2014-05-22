@@ -2,9 +2,13 @@
     halign: 'left'
     text_size: self.width, None
 
+<EchoLabel@PropertyLabel>:
+    halign: 'center'
+    text_size: self.width, None
 
 <BrewControl>:
     GridLayout:
+        id: main_params
         cols: 2
         x: root.width / 8
         width: root.width / 4
@@ -15,7 +19,7 @@
         PropertyLabel:
             text: 'Temperature'
 
-        PropertyLabel:
+        EchoLabel:
             text: str(root.temperature)
 
         PropertyLabel:
@@ -38,3 +42,20 @@
         Button:
             text: 'on' if root.pid_status else 'off'
             on_press: root.toggle_pid()
+
+    GridLayout:
+        cols: 3
+        x: main_params.x
+        y: main_params.y - main_params.height - 2*main_params.row_default_height
+        width: main_params.width
+        row_default_height: main_params.row_default_height
+        row_force_default: True
+
+        PropertyLabel:
+            text: 'Setpoint'
+
+        FloatInput:
+            on_text_validate: root.set_setpoint(float(self.text))
+
+        EchoLabel:
+            text: str(root.setpoint)
