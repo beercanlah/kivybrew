@@ -1,8 +1,10 @@
 from kivy.app import App
 from kivy.uix.widget import Widget
 from kivy.uix.textinput import TextInput
-from kivy.properties import NumericProperty, BooleanProperty
+from kivy.uix.anchorlayout import AnchorLayout
+from kivy.properties import NumericProperty, BooleanProperty, ObjectProperty
 from kivy.clock import Clock
+from kivy.garden.graph import Graph, MeshLinePlot
 import re
 
 # For now path to ardumashtun is hard coded, sorry
@@ -38,7 +40,12 @@ class BrewControl(Widget):
     dutycycle = NumericProperty(0)
     connected = BooleanProperty(False)
 
+    graph = ObjectProperty(None)
+    plot = ObjectProperty(None)
+
     mashtun = None
+
+    iteration = 0
 
     def update(self, dt):
         self.temperature = self.mashtun.temperature
@@ -49,6 +56,11 @@ class BrewControl(Widget):
         self.p_value = self.mashtun.p_value
         self.i_value = self.mashtun.i_value
         self.dutycycle = self.mashtun.dutycycle
+
+        self.plot.points.append((self.iteration, self.temperature))
+        print self.plot.points
+
+        self.iteration += 1
 
     def toggle_pump(self):
         self.mashtun.pump = not self.mashtun.pump
@@ -75,6 +87,9 @@ class BrewControl(Widget):
             self.mashtun = UnoMashtun(connection)
             Clock.schedule_interval(self.update, 1.0)
             self.connected = True
+            plot = MeshLinePlot(color=[1, 0, 0, 1])
+            self.plot = plot
+            self.ids.graph.add_plot(plot)
 
 
 class BrewApp(App):

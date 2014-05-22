@@ -104,3 +104,20 @@
 
         EchoLabel:
             text: str(root.i_value)
+
+    AnchorLayout:
+
+        anchor_x: 'left'
+        anchor_y: 'bottom'
+
+        x: root.x + 0.5*root.width
+        y: root.y + 0.25*root.height
+
+        width: 0.4 * root.width
+        height: 0.5 * root.height
+
+        Graph:
+            id: graph
+            xlabel: 'Time'
+            ylabel: 'Temperature'
+            background_color: 'f8f8f2'
