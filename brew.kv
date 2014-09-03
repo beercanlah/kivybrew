@@ -5,6 +5,8 @@
 <EchoLabel@PropertyLabel>:
     halign: 'center'
     text_size: self.width, None
+<BoxLayout>:
+    orientation: 'horizontal'
 
 <BrewControl>:
     GridLayout:
@@ -19,10 +21,11 @@
         PropertyLabel:
             text: 'Serial port'
 
-        TextInput:
+        Spinner:
             id: connection_input
-            multiline: False
-            text: '/dev/tty.usbmodem1411'
+            text: 'Select Serial Port'
+            values: root.serial_ports_android()
+            size_hint_y: None
 
         Button:
             text: 'connect' if not root.connected else 'disconnect'
@@ -38,7 +41,7 @@
         row_force_default: True
 
         PropertyLabel:
-            text: 'Temperature'
+            text: 'Temparture'
 
         EchoLabel:
             text: str(root.temperature)
@@ -69,7 +72,7 @@
         Button:
             text: 'on' if root.pid_status else 'off'
             on_press: root.toggle_pid()
-
+    
     GridLayout:
         cols: 3
         x: main_params.x
@@ -120,4 +123,33 @@
             id: graph
             xlabel: 'Time'
             ylabel: 'Temperature'
-            background_color: 'f8f8f2'
+            background_color: [0,1,0,0]
+            ymin: 10
+            ymax: 110
+            xmin: 0
+            xmax: 100
+            y_grid: 'True'
+            y_ticks_major: 20
+            y_grid_label: 'True'
+            x_grid_label: 'True'
+            x_grid: 'True'
+            x_ticks_major: 10
+
+    AnchorLayout:
+
+        anchor_x: 'left'
+        anchor_y: 'bottom'
+
+        x: root.x + 0.8*root.width
+        y: root.y + 0.8*root.height
+
+        width: root.width
+        height:  root.height        
+
+
+
+        Image:
+            source: root.logo
+            size: [120,96]
+            size_hint: None, None
+

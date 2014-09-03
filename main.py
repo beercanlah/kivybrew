@@ -1,17 +1,22 @@
+
+from kivy.config import Config
+Config.set('graphics', 'width', '1280')# set screen size to nexus 7 dimensions looks ok on PC
+Config.set('graphics', 'height', '720')
+
 from kivy.app import App
 from kivy.uix.widget import Widget
 from kivy.uix.textinput import TextInput
-from kivy.uix.anchorlayout import AnchorLayout
 from kivy.properties import NumericProperty, BooleanProperty, ObjectProperty
 from kivy.clock import Clock
+from kivy.utils import platform
 from kivy.garden.graph import Graph, MeshLinePlot
 import re
-
+import os
+import glob
 # For now path to ardumashtun is hard coded, sorry
-import sys
-sys.path.append('../ardumashtun/python')
 
-from ardumashtun import UnoMashtun
+
+import ardumashtun as mash
 
 
 class FloatInput(TextInput):
@@ -28,25 +33,28 @@ class FloatInput(TextInput):
             s = '.'.join([re.sub(pat, '', s) for s in substring.split('.', 1)])
         return super(FloatInput, self).insert_text(s, from_undo=from_undo)
 
-
 class BrewControl(Widget):
     temperature = NumericProperty(0)
     pump_status = BooleanProperty(False)
     pid_status = BooleanProperty(False)
     heater_status = BooleanProperty(False)
-    setpoint = NumericProperty(0)
-    p_value = NumericProperty(0)
-    i_value = NumericProperty(0)
+    setpoint = NumericProperty(25)
+    p_value = NumericProperty(10)
+    i_value = NumericProperty(0.11)
     dutycycle = NumericProperty(0)
     connected = BooleanProperty(False)
-
-    graph = ObjectProperty(None)
+    
+    logo = 'logo.png'
+    graph = Graph(xlabel='X', ylabel='Y', x_ticks_minor=5,
+            x_ticks_major=25, y_ticks_major=1,
+            y_grid_label=True, x_grid_label=True, padding=5,
+            x_grid=True, y_grid=True, ymin=10, ymax=110)
     plot = ObjectProperty(None)
 
     mashtun = None
 
     iteration = 0
-
+    #print connection
     def update(self, dt):
         self.temperature = self.mashtun.temperature
         self.heater_status = self.mashtun.heater
@@ -57,8 +65,8 @@ class BrewControl(Widget):
         self.i_value = self.mashtun.i_value
         self.dutycycle = self.mashtun.dutycycle
 
-        self.plot.points.append((self.iteration, self.temperature))
-        print self.plot.points
+        self.plot.points.append((self.iteration/60, self.temperature))
+        #print self.plot.points
 
         self.iteration += 1
 
@@ -84,13 +92,20 @@ class BrewControl(Widget):
 
     def connect_to_arduino(self, connection):
         if not self.connected:
-            self.mashtun = UnoMashtun(connection)
+            if platform == 'android': #to get access to serial port on android
+                os.system("su -c chmod 777 " + connection)#has to run as child otherwise will not work with all su binarys
+            self.mashtun = mash.UnoMashtun(connection)
             Clock.schedule_interval(self.update, 1.0)
             self.connected = True
             plot = MeshLinePlot(color=[1, 0, 0, 1])
             self.plot = plot
             self.ids.graph.add_plot(plot)
-
+    
+    def serial_ports_android(self):
+        #Lists serial ports
+        ports = glob.glob('/dev/ttyACM*')
+        return ports
+         
 
 class BrewApp(App):
     def build(self):
